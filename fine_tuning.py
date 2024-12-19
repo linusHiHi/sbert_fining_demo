@@ -59,7 +59,7 @@ def eval_metrics(model_, loader):
             output, cosine_score = model_(s)
             loss = criterion(output, labels)
             loss_sum += loss.item()
-            corrcoef_sum += compute_corrcoef(cosine_score.cpu().numpy(), labels.cpu().numpy())
+            corrcoef_sum += compute_corrcoef(cosine_score.to(DEVICE).numpy(), labels.to(DEVICE).numpy())
             count += 1
     return loss_sum / count, corrcoef_sum / count
 
@@ -95,7 +95,7 @@ for epoch in range(EPOCHS):
         optimizer.step()
 
         if step % 10 == 0:
-            corrcoef = compute_corrcoef(cosine_score.detach().cpu().numpy(), labels.detach().cpu().numpy())
+            corrcoef = compute_corrcoef(cosine_score.detach().to(DEVICE).numpy(), labels.detach().to(DEVICE).numpy())
             print(f"Epoch {epoch+1}, Step {step}, Loss: {loss.item()}, Corrcoef: {corrcoef}")
 
     loss_val, corrcoef_val = eval_metrics(model, val_loader)
@@ -114,7 +114,7 @@ def search_top_n(input_text_, candidate_text, candidate_embeddings, top_n=3):
     text_token_ = TOKENIZER.batch_encode_plus([input_text_], truncation=True, padding=True,
                                               max_length=PRE_TRAIN_CONFIG.max_position_embeddings,
                                               return_tensors="pt")
-    embeddings_ = PRE_TRAIN(**text_token_)[0][:, 0, :].detach().cpu().numpy()
+    embeddings_ = PRE_TRAIN(**text_token_)[0][:, 0, :].detach().to(DEVICE).numpy()
     embeddings_ = embeddings_ / np.linalg.norm(embeddings_, axis=1)
     candidate_embeddings = candidate_embeddings / np.linalg.norm(candidate_embeddings, axis=1, keepdims=True)
     scores = np.dot(embeddings_, np.array(candidate_embeddings).T)
@@ -133,7 +133,7 @@ for text in candidate_texts:
     text_token = TOKENIZER.batch_encode_plus([text], truncation=True, padding=True,
                                              max_length=PRE_TRAIN_CONFIG.max_position_embeddings,
                                              return_tensors="pt")
-    embeddings = PRE_TRAIN(**text_token)[0][:, 0, :].detach().cpu().numpy()
+    embeddings = PRE_TRAIN(**text_token)[0][:, 0, :].detach().to(DEVICE).numpy()
     candidate_emb.append(embeddings[0])
 
 results = search_top_n(input_text, candidate_texts, candidate_emb, top_n=3)
