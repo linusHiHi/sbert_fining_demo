@@ -110,20 +110,21 @@ torch.save(model.state_dict(), "./miaModel/whole.bin")
 torch.save(model.pre_train.state_dict(), "./miaModel/my_bert.bin")
 
 # 文本匹配检索
+from sklearn.metrics.pairwise import cosine_similarity
 def search_top_n(input_text_, candidate_text, candidate_embeddings, top_n=3):
     text_token_ = TOKENIZER.batch_encode_plus([input_text_], truncation=True, padding=True,
                                               max_length=PRE_TRAIN_CONFIG.max_position_embeddings,
                                               return_tensors="pt")
-
-    embeddings_ = PRE_TRAIN(**text_token)['last_hidden_state'][:, 0, :].detach().cpu().numpy()
+    embeddings_ = PRE_TRAIN(**text_token_)[0][:, 0, :].detach().cpu().numpy()
 
     embeddings_ = embeddings_ / np.linalg.norm(embeddings_, axis=1)
     candidate_embeddings = candidate_embeddings / np.linalg.norm(candidate_embeddings, axis=1, keepdims=True)
-    scores = np.dot(embeddings_, np.array(candidate_embeddings).T)
+
+    # 使用sklearn的cosine_similarity
+    scores = cosine_similarity(embeddings_, candidate_embeddings)
     top_index = np.argsort(scores, axis=1)[:, -top_n:]
-    res = []
-    for i in top_index[0]:
-        res.append({"text": candidate_text[i], "score": scores[0, i]})
+
+    res = [{"text": candidate_text[i], "score": scores[0, i]} for i in top_index[0]]
     return res
 
 # 测试
