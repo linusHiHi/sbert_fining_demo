@@ -114,7 +114,8 @@ def search_top_n(input_text_, candidate_text, candidate_embeddings, top_n=3):
     text_token_ = TOKENIZER.batch_encode_plus([input_text_], truncation=True, padding=True,
                                               max_length=PRE_TRAIN_CONFIG.max_position_embeddings,
                                               return_tensors="pt")
-    embeddings = PRE_TRAIN(**text_token)['last_hidden_state'][:, 0, :].detach().cpu().numpy()
+
+    embeddings_ = PRE_TRAIN(**text_token)['last_hidden_state'][:, 0, :].detach().cpu().numpy()
 
     embeddings_ = embeddings_ / np.linalg.norm(embeddings_, axis=1)
     candidate_embeddings = candidate_embeddings / np.linalg.norm(candidate_embeddings, axis=1, keepdims=True)
