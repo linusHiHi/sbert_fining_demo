@@ -37,7 +37,7 @@ for sheet_name, df in data_excel.items():
 
 
 # 测试新的输入文本
-input_texts = "今天的水池冒好多热气"
+input_texts = "美国韶关的火车卧铺还有吗"
 embeddings = model.encode(input_texts)
 
 # 假设候选文本和它们的嵌入已经准备好
