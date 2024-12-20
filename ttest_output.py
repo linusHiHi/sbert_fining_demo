@@ -1,3 +1,4 @@
+import numpy as np
 from torch.utils.data import DataLoader
 import math
 from sentence_transformers import SentenceTransformer, LoggingHandler, losses, models, util
@@ -5,7 +6,8 @@ from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
 from sentence_transformers.readers import InputExample
 import logging
 import pandas as pd
-from transformers import BertModel
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 from util import convert_excel_to_classification_format, split_data
 PRE_TRAIN_PATH = "./test_output"
@@ -18,7 +20,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 
 # Use Huggingface/transformers model (like BERT, RoBERTa, XLNet, XLM-R) for mapping tokens to embeddings
 
-PRE_TRAIN = SentenceTransformer(PRE_TRAIN_PATH)
+model = SentenceTransformer(PRE_TRAIN_PATH)
 
 def sampling(datas):
 
@@ -28,13 +30,30 @@ def sampling(datas):
   return samples
 
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
-data = convert_excel_to_classification_format(data_excel)
+data = []
+for sheet_name, df in data_excel.items():
+    sentences = df['sentence'].tolist()  # 获取当前类的所有句子
+    data += sentences
 
-train_samples, test_samples, dev_samples = split_data(data)
-"""train_samples = sampling(train_samples)
-dev_samples = sampling(dev_samples)"""
-test_samples = sampling(test_samples)
-# test_loader = DataLoader(test_samples, shuffle=True, batch_size=train_batch_size)
-evaluator = EmbeddingSimilarityEvaluator.from_input_examples(test_samples, name='sts-dev')
-res = evaluator(PRE_TRAIN)
-print(res)
+
+# 测试新的输入文本
+input_texts = "今天的水池冒好多热气"
+embeddings = model.encode(input_texts)
+
+# 假设候选文本和它们的嵌入已经准备好
+candidate_texts = data
+candidate_embeddings = model.encode(candidate_texts)
+
+# 计算余弦相似度
+similarities = [cosine_similarity(embeddings.reshape(1,-1), candidate_embedding.reshape(1,-1)) for candidate_embedding in candidate_embeddings]
+similarities=np.array(similarities)
+similarities=np.vstack(similarities).reshape(-1)
+# 输出前3个最相似的文本
+top_n = 5
+top_indices = similarities.argsort()[0:top_n]
+last = similarities.argsort()[-top_n:-1]
+print(f"original: {input_texts}")
+for idx in top_indices:
+    print(f"Text: {candidate_texts[idx]}, Similarity Score: {similarities[idx]}")
+for idx in last:
+    print(f"fail Text: {candidate_texts[idx]}, Similarity Score: {similarities[idx]}")
