@@ -7,12 +7,14 @@ from sentence_transformers import SentenceTransformer, LoggingHandler, losses, m
 import logging
 import pandas as pd
 
-from util.util import convert_excel_to_classification_format, split_data, sampling, convert_csv_to_classification_format
+from util.util import split_data, sampling, convert_csv_to_classification_format
 
 model_name = 'bert-base-chinese'
 model_save_path = 'test_output'
 train_batch_size = 16
 num_epochs = 4
+
+classes = 4
 
 
 logging.basicConfig(format='%(asctime)s - %(message)s',
@@ -39,12 +41,13 @@ model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 """
 ******************data dealing**************************
 """
+
 """
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
 data = convert_excel_to_classification_format(data_excel)
 """
-data_csv = pd.read_csv("./data/dataset.csv")
-data = convert_csv_to_classification_format(data_csv,3)
+data_csv = pd.read_csv("./data/dataset_whole.csv")
+data = convert_csv_to_classification_format(data_csv,classes)
 train_samples, test_samples, dev_samples = split_data(data)
 
 train_samples = sampling(train_samples)
@@ -68,6 +71,7 @@ model.fit(train_objectives=[(train_dataloader, train_loss)],
 """
 *****************  test  ******************
 """
+
 model = SentenceTransformer(model_save_path)
 test_evaluator = EmbeddingSimilarityEvaluator.from_input_examples(test_samples, name='sts-test')
 # test_evaluator(model, output_path=model_save_path)
