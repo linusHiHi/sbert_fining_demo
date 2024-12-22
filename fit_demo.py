@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer, LoggingHandler, losses, m
 import logging
 import pandas as pd
 
-from util.util import convert_excel_to_classification_format, split_data, sampling
+from util.util import convert_excel_to_classification_format, split_data, sampling, convert_csv_to_classification_format
 
 model_name = 'bert-base-chinese'
 model_save_path = 'test_output'
@@ -39,9 +39,12 @@ model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 """
 ******************data dealing**************************
 """
+"""
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
 data = convert_excel_to_classification_format(data_excel)
-
+"""
+data_csv = pd.read_csv("./data/dataset.csv")
+data = convert_csv_to_classification_format(data_csv,3)
 train_samples, test_samples, dev_samples = split_data(data)
 
 train_samples = sampling(train_samples)

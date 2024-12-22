@@ -4,21 +4,9 @@ from sklearn.model_selection import train_test_split
 import torch
 from sentence_transformers import InputExample
 
-
-def convert_excel_to_classification_format(sheets):
-    # 读取 Excel 文件中的所有工作表
-    # 用于存储结果
-    data = []
-
-    # 用于存储所有的句子对
-    sentences_by_class = {}
-
-    # 读取每个 sheet 中的句子数据
-    for sheet_name, df in sheets.items():
-        sentences = df['sentence'].tolist()  # 获取当前类的所有句子
-        sentences_by_class[sheet_name] = sentences
-
+def dic_to_classification_format(sentences_by_class):
     # 处理每个类的句子
+    data = []
     for class_name, sentences in sentences_by_class.items():
         # 将相同类中的句子两两组合，并添加标签 1
         for sentence1, sentence2 in itertools.combinations(sentences, 2):
@@ -32,10 +20,29 @@ def convert_excel_to_classification_format(sheets):
                         if [sentence1, sentence2, 0] not in data and [sentence2, sentence1, 0] not in data:
                             data.append([sentence1, sentence2, 0])
 
-    return list(data)
+    return data
+
+def convert_excel_to_classification_format(sheets):
+    # 读取 Excel 文件中的所有工作表
+
+    # 用于存储所有的句子对
+    sentences_by_class = {}
+
+    # 读取每个 sheet 中的句子数据
+    for sheet_name, df in sheets.items():
+        sentences = df['sentence'].tolist()  # 获取当前类的所有句子
+        sentences_by_class[sheet_name] = sentences
+
+    return dic_to_classification_format(sentences_by_class)
 
 
 
+
+def convert_csv_to_classification_format(df, classes):
+    sentences_by_class = {}
+    for i in range(classes):
+        sentences_by_class[f"{i}"] = df["sentence"][df["class"]==i]
+    return dic_to_classification_format(sentences_by_class)
 
 
 def save_checkpoint_torch(model,path_to_whole_model, path_to_bert_model):

@@ -64,7 +64,7 @@ def eval_metrics(model_, loader):
             corrcoef_sum += compute_corrcoef(cosine_score.detach().cpu().numpy(), labels.detach().cpu().numpy())
             count += 1
     return loss_sum / count, corrcoef_sum / count
-"""
+
 # 数据加载
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
 data = convert_excel_to_classification_format(data_excel)
@@ -74,7 +74,7 @@ data = [
     ["花呗收钱就是用支付宝帐号收嘛", "我用手机花呗收钱", 0],
     ["花呗买东西，商家不发货怎么退款", "花呗已经分期的商品 退款怎么办", 0]
 ]
-
+"""
 train_loader = DataLoader(ATECDataset(data), batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
 val_loader = DataLoader(ATECDataset(data), batch_size=BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
 
@@ -110,6 +110,7 @@ for epoch in range(EPOCHS):
 
 # 保存模型
 save_checkpoint_torch(model, PATH_TO_WHOLE_MODEL, PATH_TO_BERT_MODEL)
+"""
 # 文本匹配检索
 from sklearn.metrics.pairwise import cosine_similarity
 def search_top_n(input_text_, candidate_text, candidate_embeddings, top_n=3):
@@ -143,3 +144,4 @@ for text in candidate_texts:
 
 results = search_top_n(input_text, candidate_texts, candidate_emb, top_n=3)
 print(f"\n\n\n\n{results}")
+"""
