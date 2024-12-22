@@ -2,7 +2,7 @@ from util.util import save_checkpoint_torch
 
 
 class EarlyStopping:
-    def __init__(self, patience=3, delta=0):
+    def __init__(self, patience=3, delta=0,path_whole=None,path_bert=None):
         """
         :param patience: 当验证集损失在多少个epoch内没有改善时，停止训练
         :param delta: 假设验证集损失在变化时，才认为是改善（防止微小的波动导致早停）
@@ -13,6 +13,8 @@ class EarlyStopping:
         self.early_stop = False
         self.counter = 0
         self.best_loss = None
+        self.path_bert = path_bert
+        self.path_whole = path_whole
 
     def __call__(self, corrcoef, model):
         """
@@ -22,10 +24,14 @@ class EarlyStopping:
         """
         if self.best_loss is None:
             self.best_loss = corrcoef
-            save_checkpoint_torch(model)
+            save_checkpoint_torch(model,
+                                  path_to_whole_model=self.path_whole,
+                                  path_to_bert_model=self.path_bert)
         elif corrcoef < self.best_loss - self.delta:
             self.best_loss = corrcoef
-            save_checkpoint_torch(model)
+            save_checkpoint_torch(model,
+                                  path_to_whole_model=self.path_whole,
+                                  path_to_bert_model=self.path_bert)
             self.counter = 0
         else:
             self.counter += 1

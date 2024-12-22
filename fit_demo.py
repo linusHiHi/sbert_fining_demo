@@ -2,7 +2,7 @@
 from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
 from torch.utils.data import DataLoader
 import math
-from sentence_transformers import SentenceTransformer, LoggingHandler, losses, models, util
+from sentence_transformers import SentenceTransformer, LoggingHandler, losses, models
 
 import logging
 import pandas as pd

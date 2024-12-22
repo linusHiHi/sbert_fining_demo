@@ -85,7 +85,7 @@ criterion = nn.CrossEntropyLoss(reduction="mean")
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.00003)
 
 # 训练
-early_stop = EarlyStopping(patience=3, delta=0.01)
+early_stop = EarlyStopping(patience=3, delta=0.01, path_bert=PATH_TO_BERT_MODEL, path_whole=PATH_TO_WHOLE_MODEL)
 for epoch in range(EPOCHS):
     model.train()
     for step, (s, labels) in enumerate(train_loader):
