@@ -138,8 +138,8 @@ for text in candidate_texts:
                                              max_length=PRE_TRAIN_CONFIG.max_position_embeddings,
                                              return_tensors="pt")
     embeddings = PRE_TRAIN(**text_token)[0][:, 0, :]
-    another = embeddings.detach().cpu().numpy()
-    candidate_emb.append(another[0])
+    # another = embeddings.detach().cpu().numpy()
+    candidate_emb.append(embeddings[0])
 
 results = search_top_n(input_text, candidate_texts, candidate_emb, top_n=3)
 print(f"\n\n\n\n{results}")
