@@ -32,7 +32,7 @@ for sheet_name, df in data_excel.items():
 
 
 # 测试新的输入文本
-input_texts = "千问"
+input_texts = ["千问","阿里巴巴"]
 embeddings = model.encode(input_texts)
 
 # 假设候选文本和它们的嵌入已经准备好
@@ -41,7 +41,7 @@ candidate_texts = ["汉堡","哈布斯堡","谢林", "引力波","火车票","�
 candidate_embeddings = model.encode(candidate_texts)
 
 # 计算余弦相似度
-similarities = [cosine_similarity(embeddings.reshape(1,-1), candidate_embedding.reshape(1,-1)) for candidate_embedding in candidate_embeddings]
+similarities = [cosine_similarity(embeddings, candidate_embedding) for candidate_embedding in candidate_embeddings]
 similarities=np.array(similarities)
 similarities=np.vstack(similarities).reshape(-1)
 # 输出前{top_n}个最相似的文本
