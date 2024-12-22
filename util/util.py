@@ -3,6 +3,7 @@ import itertools
 from sklearn.model_selection import train_test_split
 import torch
 from sentence_transformers import InputExample
+import random
 
 def dic_to_classification_format(sentences_by_class):
     # 处理每个类的句子
@@ -12,13 +13,32 @@ def dic_to_classification_format(sentences_by_class):
         for sentence1, sentence2 in itertools.combinations(sentences, 2):
             data.append([sentence1, sentence2, 1])
 
+        """
         # 处理不同类之间的句子对
         for other_class_name, other_sentences in sentences_by_class.items():
-            if other_class_name != class_name:
+            if int(other_class_name) > int(class_name):
                 for sentence1 in sentences:
-                    for sentence2 in other_sentences:
+                      for sentence2 in other_sentences:
                         if [sentence1, sentence2, 0] not in data and [sentence2, sentence1, 0] not in data:
                             data.append([sentence1, sentence2, 0])
+        """
+
+
+
+        # 假设每个类别的句子保存在 sentences_by_class 字典中
+        # 采样参数
+        sample_size = 230  # 从每个类别中随机选择的句子数目
+
+        # 处理不同类之间的句子对
+        for other_class_name, other_sentences in sentences_by_class.items():
+            if int(other_class_name) > int(class_name):
+                # 随机采样一定数量的句子（如果该类别的句子数目大于 sample_size）
+                sampled_sentences = random.sample(list(sentences), min(sample_size, len(sentences)))
+                sampled_other_sentences = random.sample(list(other_sentences), min(sample_size, len(other_sentences)))
+
+                for sentence1 in sampled_sentences:
+                    for sentence2 in sampled_other_sentences:
+                        data.append([sentence1, sentence2, 0])
 
     return data
 
