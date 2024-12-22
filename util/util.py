@@ -8,7 +8,7 @@ from sentence_transformers import InputExample
 def convert_excel_to_classification_format(sheets):
     # 读取 Excel 文件中的所有工作表
     # 用于存储结果
-    data = set()
+    data = []
 
     # 用于存储所有的句子对
     sentences_by_class = {}
@@ -22,15 +22,15 @@ def convert_excel_to_classification_format(sheets):
     for class_name, sentences in sentences_by_class.items():
         # 将相同类中的句子两两组合，并添加标签 1
         for sentence1, sentence2 in itertools.combinations(sentences, 2):
-            data.add([sentence1, sentence2, 1])
+            data.append([sentence1, sentence2, 1])
 
         # 处理不同类之间的句子对
         for other_class_name, other_sentences in sentences_by_class.items():
             if other_class_name != class_name:
                 for sentence1 in sentences:
                     for sentence2 in other_sentences:
-                        if [sentence1, sentence2, 0] in data or [sentence2, sentence1, 0] in data:
-                            data.add([sentence1, sentence2, 0])
+                        if [sentence1, sentence2, 0] not in data and [sentence2, sentence1, 0] not in data:
+                            data.append([sentence1, sentence2, 0])
 
     return list(data)
 
