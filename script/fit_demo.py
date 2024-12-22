@@ -6,7 +6,7 @@ from sentence_transformers import SentenceTransformer, LoggingHandler, losses, m
 import logging
 import pandas as pd
 
-from util import convert_excel_to_classification_format, split_data, sampling
+from util.util import convert_excel_to_classification_format, split_data, sampling
 
 model_name = 'bert-base-chinese'
 model_save_path = 'test_output'

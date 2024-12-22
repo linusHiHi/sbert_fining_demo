@@ -36,39 +36,6 @@ def convert_excel_to_classification_format(sheets):
 
 
 
-"""def convert_excel_to_classification_format_(sheets, negative_sample_ratio=0.1):
-    # 用于存储结果
-    data = []
-
-    # 用于存储所有的句子对
-    sentences_by_class = {}
-
-    # 读取每个 sheet 中的句子数据
-    for sheet_name, df in sheets.items():
-        sentences = df['sentence'].tolist()  # 获取当前类的所有句子
-        sentences_by_class[sheet_name] = sentences
-
-    # 处理每个类的句子
-    for class_name, sentences in sentences_by_class.items():
-        # 将相同类中的句子两两组合，并添加标签 1
-        for sentence1, sentence2 in itertools.combinations(sentences, 2):
-            data.append([sentence1, sentence2, 1])
-
-    # 处理不同类之间的句子对
-    for class_name, sentences in sentences_by_class.items():
-        for other_class_name, other_sentences in sentences_by_class.items():
-            if class_name != other_class_name:
-                # 选择性地采样负样本
-                num_negative_samples = int(len(other_sentences) * negative_sample_ratio)
-                sampled_other_sentences = random.sample(other_sentences, num_negative_samples)
-
-                # 创建负样本的句子对
-                for sentence1 in sentences:
-                    for sentence2 in sampled_other_sentences:
-                        data.append([sentence1, sentence2, 0])
-
-    return data
-"""
 
 
 def save_checkpoint_torch(model,path_to_whole_model, path_to_bert_model):
