@@ -5,13 +5,14 @@ from torch.utils.data import DataLoader
 from transformers import BertConfig, BertTokenizer, BertModel
 import numpy as np
 
-import util
-from dataset import ATECDataset, collate_fn
-from util import EarlyStopping
+from util.dataset import ATECDataset, collate_fn
+from util import EarlyStopping, save_checkpoint_torch
 
 # 配置
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 PRE_TRAIN_PATH = "./bert-base-chinese"
+PATH_TO_WHOLE_MODEL = "./miaModel/whole.pth"
+PATH_TO_BERT_MODEL = "./miaModel/bert.pth"
 BATCH_SIZE = 32
 EPOCHS = 5
 # 加载预训练模型
@@ -106,9 +107,7 @@ for epoch in range(EPOCHS):
     print(f"Validation - Epoch {epoch+1}, Loss: {loss_val}, Corrcoef: {corrcoef_val}")
 
 # 保存模型
-torch.save(model.state_dict(), "./miaModel/whole.bin")
-torch.save(model.pre_train.state_dict(), "./miaModel/my_bert.bin")
-
+save_checkpoint_torch(model, PATH_TO_WHOLE_MODEL, PATH_TO_BERT_MODEL)
 # 文本匹配检索
 from sklearn.metrics.pairwise import cosine_similarity
 def search_top_n(input_text_, candidate_text, candidate_embeddings, top_n=3):

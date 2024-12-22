@@ -1,15 +1,10 @@
 import numpy as np
-from torch.utils.data import DataLoader
-import math
-from sentence_transformers import SentenceTransformer, LoggingHandler, losses, models, util
-from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
+from sentence_transformers import SentenceTransformer, LoggingHandler
 from sentence_transformers.readers import InputExample
 import logging
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-
-from util import convert_excel_to_classification_format, split_data
 PRE_TRAIN_PATH = "./test_output"
 train_batch_size = 16
 num_epochs = 4
@@ -37,18 +32,19 @@ for sheet_name, df in data_excel.items():
 
 
 # 测试新的输入文本
-input_texts = "美国韶关的火车卧铺还有吗"
+input_texts = "千问"
 embeddings = model.encode(input_texts)
 
 # 假设候选文本和它们的嵌入已经准备好
-candidate_texts = data
+#candidate_texts = data
+candidate_texts = ["汉堡","哈布斯堡","谢林", "引力波","火车票","冰淇淋","果冻","面包"]
 candidate_embeddings = model.encode(candidate_texts)
 
 # 计算余弦相似度
 similarities = [cosine_similarity(embeddings.reshape(1,-1), candidate_embedding.reshape(1,-1)) for candidate_embedding in candidate_embeddings]
 similarities=np.array(similarities)
 similarities=np.vstack(similarities).reshape(-1)
-# 输出前3个最相似的文本
+# 输出前{top_n}个最相似的文本
 top_n = 5
 top_indices = similarities.argsort()[0:top_n]
 last = similarities.argsort()[-top_n:-1]
