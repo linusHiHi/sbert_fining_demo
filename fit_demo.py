@@ -39,7 +39,7 @@ model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 """
 ******************data dealing**************************
 """
-data_excel = pd.read_excel("../data/data.xlsx", sheet_name=None)
+data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
 data = convert_excel_to_classification_format(data_excel)
 
 train_samples, test_samples, dev_samples = split_data(data)
