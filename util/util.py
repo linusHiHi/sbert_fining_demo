@@ -27,7 +27,7 @@ def dic_to_classification_format(sentences_by_class):
 
         # 假设每个类别的句子保存在 sentences_by_class 字典中
         # 采样参数
-        sample_size = 230  # 从每个类别中随机选择的句子数目
+        sample_size =270  # 从每个类别中随机选择的句子数目
 
         # 处理不同类之间的句子对
         for other_class_name, other_sentences in sentences_by_class.items():
