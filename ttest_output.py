@@ -51,7 +51,6 @@ similarities=np.vstack(similarities).reshape(len(input_texts), len(candidate_tex
 top_n = 5
 for i in range(len(input_texts)):
     top_indices = similarities.argsort()[i][-top_n:]
-    if similarities[top_indices].sum() > 0:
-        print(f"original: {input_texts}")
+    print(f"original: {input_texts}")
     for idx in top_indices:
         print(f"Text: {candidate_texts[idx]}, Similarity Score: {similarities[i][idx]}")
