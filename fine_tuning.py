@@ -7,6 +7,7 @@ import numpy as np
 
 from util.dataset import ATECDataset, collate_fn
 from util import EarlyStopping, save_checkpoint_torch
+from util.util import convert_excel_to_classification_format
 
 # 配置
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +67,7 @@ def eval_metrics(model_, loader):
 
 # 数据加载
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
-data = util.convert_excel_to_classification_format_(data_excel)
+data = convert_excel_to_classification_format(data_excel)
 """
 data = [
     ["打不开花呗", "为什么花呗打不开", 1],
