@@ -67,7 +67,7 @@ def eval_metrics(model_, loader):
 
 # 数据加载
 data_csv = pd.read_csv("./data/dataset.csv")
-data = convert_csv_to_classification_format(data_csv)
+data = convert_csv_to_classification_format(data_csv,3)
 """
 data_excel = pd.read_excel("./data/data.xlsx", sheet_name=None)
 data = convert_excel_to_classification_format(data_excel)
