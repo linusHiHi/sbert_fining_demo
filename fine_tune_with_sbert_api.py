@@ -55,14 +55,6 @@ train_loss = losses.CosineSimilarityLoss(model=model)
 data_csv = pd.read_csv(path_to_dataset)
 data = convert_util(data_csv,"csv",classes)
 
-"""以上两行可用性存疑,以下为替换代码
-train_samples, test_samples, dev_samples = split_data(data)
-
-train_samples = sampling(train_samples)
-dev_samples = sampling(dev_samples)
-test_samples = sampling(test_samples)
-"""
-
 #分训练集
 train_samples, test_samples, dev_samples = map(sampling, split_data(data))
 
