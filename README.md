@@ -30,3 +30,9 @@ data
 │ └── sampling_class_0_in_full_data_.py
 └── raw
   └── raw_test
+### bert-base-chinese
+原始的sbert模型
+### pytorch_result and sbert_result 
+微调后的模型
+### script and openmax
+存放了一些未写完或者被丢弃的代码
