@@ -64,7 +64,7 @@ test_samples = sampling(test_samples)
 """
 
 #分训练集
-train_samples, test_samples, dev_samples = split_data(data).map(sampling)
+train_samples, test_samples, dev_samples = map(sampling, split_data(data))
 
 train_dataloader = DataLoader(train_samples, shuffle=True, batch_size=train_batch_size)
 evaluator = EmbeddingSimilarityEvaluator.from_input_examples(dev_samples, name=evaluate_name)
