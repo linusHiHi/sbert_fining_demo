@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from scipy.spatial.distance import euclidean
 from scipy.stats import weibull_min
 
-from fine_tuning import train_loader
+from fine_tune_with_pytorch import train_loader
 
 
 # 计算每个类别的平均激活向量（MAV）
@@ -81,10 +81,10 @@ mavs = compute_MAV(model, train_loader, num_classes)
 weibull_models = fit_weibull_distributions(model, train_loader, mavs, num_classes)
 
 
-model = torch.load("./miaModel/whole.bin")
+model = torch.load("./pytorch_result/whole.bin")
 
-torch.save(mavs, "miaModel/mavs.pth")
-torch.save(weibull_models, "miaModel/weibull.pth")
+torch.save(mavs, "pytorch_result/mavs.pth")
+torch.save(weibull_models, "pytorch_result/weibull.pth")
 """
 qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 """
@@ -95,7 +95,7 @@ qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
 """
 num_classes = 3
-model = torch.load("./miaModel/whole.bin")
+model = torch.load("./pytorch_result/whole.bin")
 # 对新样本计算 OpenMax 概率
 new_thing = "这个热水袋是不是很热。"
 openmax_prob = openmax_probability(model, new_thing, mavs, weibull_models, num_classes)
