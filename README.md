@@ -20,7 +20,7 @@ data
 ├── found_class_3.csv       测试中不理想的问题（应该为3*（其他）*类但是最大相似度太高  
 ├── new_class_0_train.csv   把xx替换为地名后的文件  
 *****************
-├── full_data_with_all_new_sentence.csv 将所有的文件统合后的
+├── full_data_with_all_new_sentence.csv 将所有的文件统合后的  
 ├── sampled_data_with_all_new_sentence.csv针对class 0 规模太大（不平衡），进行了采样  
 *****************
 ├── script      用来数据处理的脚本  
