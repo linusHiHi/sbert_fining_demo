@@ -1,9 +1,11 @@
 # sbert_fining_demo
+---
 ## intro
 参考一些网络博客后，我们写了一个基于sentence-transformers的微调脚本，对[bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)进行微调。
 
 
 ## 项目结构
+![hihi](assets/project.png)
 ### 主要脚本
 - 微调脚本
  -   - fine_tune_with_pytorch.py: 被放弃的方向，作用已然不是很大。输出目录在**./pytorch_result/**
@@ -37,3 +39,26 @@ data
 微调后的模型
 ### script and openmax
 存放了一些未写完或者被丢弃的代码
+
+## 用法
+### 微调脚本只需要填写**数据集路径**和**超参数**即可
+```python
+# 可能需要配置的地方
+"""
+************************ config ******************************
+"""
+model_name = 'bert-base-chinese'
+model_save_path = 'sbert_result'
+path_to_dataset = "data/sampled_data_with_all_new_sentence.csv"
+```
+### 测试脚本只需要在 input 处填写 句子列表即可
+```python
+# 测试数据输入的位置
+"""
+*************** input data ************************
+"""
+# 测试新的输入文本
+input_texts = ["我想去列车的车头看看"]
+
+```
+结果自动输出到[./data/found_class_3.csv](./data/found_class_3.csv)

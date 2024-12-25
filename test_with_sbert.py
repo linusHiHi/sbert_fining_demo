@@ -3,7 +3,9 @@ from sentence_transformers import SentenceTransformer, LoggingHandler
 import logging
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
-
+"""
+***************** config **********************
+"""
 PRE_TRAIN_PATH = "sbert_result"
 ERROR_INPUT = "./data/found_class_3.csv"
 train_batch_size = 16
@@ -16,25 +18,18 @@ logging.basicConfig(format='%(asctime)s - %(message)s',
 # Use Huggingface/transformers model (like BERT, RoBERTa, XLNet, XLM-R) for mapping tokens to embeddings
 
 model = SentenceTransformer(PRE_TRAIN_PATH)
-"""
-def sampling(datas):
 
-  samples = []
-  for item in datas:
-    samples.append(InputExample(texts=[item[0], item[1]], label=float(item[2])))
-  return samples
-"""
 data_excel = pd.read_excel("./data/source_data.xlsx", sheet_name=None)
 data = []
 for sheet_name, df in data_excel.items():
     sentences = df['sentence'].tolist()  # 获取当前类的所有句子
     data += sentences
 
-
+"""
+*************** input data ************************
+"""
 # 测试新的输入文本
 input_texts = ["我想去列车的车头看看"]
-
-
 
 """
 input_texts = pd.read_csv("./data/found_class_3.csv")
@@ -42,7 +37,9 @@ input_texts = input_texts["sentence"]
 """
 
 
-
+"""
+***************** 测试 **********************
+"""
 error_input = []
 
 embeddings = model.encode(input_texts)
