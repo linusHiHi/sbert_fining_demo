@@ -2,8 +2,14 @@
 ---
 ## intro
 参考一些网络博客后，我们写了一个基于sentence-transformers的微调脚本，对[bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)进行微调。
-
-
+## 目标
+- 让sbert的句嵌入在不同类之间更加分散。
+## 一些规定
+类别的代码：
+* 0：购票  
+* 1：食品  
+* 2：天气  
+* 3：其他  
 ## 项目结构
 ![hihi](assets/project.png)
 ### 主要脚本
@@ -61,4 +67,4 @@ path_to_dataset = "data/sampled_data_with_all_new_sentence.csv"
 input_texts = ["我想去列车的车头看看"]
 
 ```
-结果自动输出到[./data/found_class_3.csv](./data/found_class_3.csv)
+结果自动输出到[./data/found_class_3.csv](./data/found_class_0_3.csv)

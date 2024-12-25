@@ -29,4 +29,4 @@ qwq = pd.concat(
         pd.DataFrame({"sentence":add2, "class": [2]*len(add2)})
     ]
 )
-qwq.to_csv("../data/found_class_0_to_2.csv",index=False)
+qwq.to_csv("../data/__(ready_to_del)__found_class_0_to_2.csv",index=False)
